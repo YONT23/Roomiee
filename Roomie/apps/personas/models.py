@@ -1,39 +1,38 @@
 from django.db import models
 
-class tipo_identificacion(models.Model):
-    tiid_tipodocumento = models.CharField(max_length=30)
-    tiid_numerodocumento = models.CharField(max_length=15)
+class TablaMaestra(models.Model):
+    tama_nombre1 = models.CharField(max_length=30)
+    tama_nombre2 = models.CharField(max_length=30)
+    tama_dependencia1 = models.CharField(max_length=30)
+    tama_dependencia2 = models.CharField(max_length=30)
+    tama_codigo = models.CharField(max_length=30)
+    tama_estado = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.tiid_numerodocumento
+        return self.tama_nombre1
 
 class Personas(models.Model):
     pers_nombre = models.CharField(max_length=30)
     pers_apellido = models.CharField(max_length=20)
     pers_telefono = models.CharField(max_length=10)
     pers_direccion = models.CharField(max_length=10)
-    identificacion = models.ForeignKey(tipo_identificacion, null=True, blank=True, on_delete=models.CASCADE)
+    identificacion = models.ForeignKey(TablaMaestra, null=True, blank=True, on_delete=models.CASCADE)
+    pers_numidentidad = models.CharField(max_length=45)
 
     def __str__(self):
         return self.pers_nombre
 
-class tipo_oficio(models.Model):
-    tiof_oficio = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.tiof_oficio
-
 class Cliente(models.Model):
     persona = models.ForeignKey(Personas, null=True, blank=True, on_delete=models.CASCADE)
     clie_nacionalidad = models.CharField(max_length=20)
-    oficio = models.ForeignKey(tipo_oficio, null=True, blank=True, on_delete=models.CASCADE)
+    oficio = models.ForeignKey(TablaMaestra, null=True, blank=True, on_delete=models.CASCADE)
     def __str__(self):
         return self.clie_nacionalidad
 
 
 class Propietario(models.Model):
     prop_respuesta = models.CharField(max_length=60)
-    persona = models.ForeignKey(Personas, null=True, blank=True, on_delete=models.CASCADE)
+    persona = models.ForeignKey(Personas, related_name='Nombre', null=True, blank=True, on_delete=models.CASCADE)
     cliente = models.ManyToManyField(Cliente, through='propietariocliente')
 
     def __str__(self):
