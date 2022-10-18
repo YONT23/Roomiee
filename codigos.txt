@@ -1,0 +1,33 @@
+npm create vite@latest roomie -- --template vue
+
+npm install --save axios vue-axios
+
+npm install vue-router@4 --save
+
+npm install vuex@next --save
+
+npm i vue-router
+
+npm install -g sass
+
+npm i sass
+
+npm install --save-dev sass
+
+npm i sass-loader
+
+npm i node-sass
+
+npm i typescript
+
+npm i ts-node-dev
+
+npm i vue-tsc
+
+npm install -g typescript
+
+npm add -D router@4
+
+npm install vue-router@4
+
+npx vite --port=4000
