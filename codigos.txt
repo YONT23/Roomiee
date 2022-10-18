@@ -31,3 +31,7 @@ npm add -D router@4
 npm install vue-router@4
 
 npx vite --port=4000
+
+
+Mas codigos...
+pip install django-cors-headers
