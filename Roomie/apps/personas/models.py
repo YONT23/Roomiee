@@ -1,49 +1,50 @@
 from django.db import models
+from django.conf import settings
 
-class TablaMaestra(models.Model):
-    tama_nombre1 = models.CharField(max_length=30)
-    tama_nombre2 = models.CharField(max_length=30)
-    tama_dependencia1 = models.CharField(max_length=30)
-    tama_dependencia2 = models.CharField(max_length=30)
-    tama_codigo = models.CharField(max_length=30)
-    tama_estado = models.CharField(max_length=30)
+class TblMaestra(models.Model):
+    maes_nombre = models.CharField( db_column='MAES_NOMBRE', max_length=45, null=True, blank=True)
+    maes_dependencia = models.CharField( db_column='MAES_DEPENDENCIA', max_length=45, null=True, blank=True)
+    maes_valor = models.CharField( db_column='MAES_VALOR', max_length=45, null=True, blank=True)
+    maes_estado = models.CharField( db_column='MAES_ESTADO', max_length=45, null=True, blank=True)
 
-    def __str__(self):
-        return self.tama_nombre1
+    def __str__(self) -> str:
+        return '{}'.format( self.maes_nombre)
+       
 
-class Personas(models.Model):
-    pers_nombre = models.CharField(max_length=30)
-    pers_apellido = models.CharField(max_length=20)
-    pers_telefono = models.CharField(max_length=10)
-    pers_direccion = models.CharField(max_length=10)
-    identificacion = models.ForeignKey(TablaMaestra, null=True, blank=True, on_delete=models.CASCADE)
-    pers_numidentidad = models.CharField(max_length=45)
+    class Meta:
+        db_table = 'tbl_maestra'
 
-    def __str__(self):
-        return self.pers_nombre
+
+class TblPersona(models.Model):
+    nombre = models.CharField(max_length=45)
+    apellido = models.CharField(max_length=45)
+    telefono = models.CharField(max_length=45)
+    correo = models.CharField(max_length=45)
+    ciudad = models.CharField(max_length=45)
+    num_identidad = models.CharField(max_length=45)
+    tipo_sexo = models.ForeignKey(TblMaestra, blank=True, null=True, on_delete=models.SET_NULL, related_name='sexo')
+    tipo_identificacion = models.ForeignKey(TblMaestra, blank=True, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self) -> str:
+        return self.nombre + ' ' + self.apellido
+
+    class Meta:
+        db_table = 'tbl_persona'
 
 class Cliente(models.Model):
-    persona = models.ForeignKey(Personas, null=True, blank=True, on_delete=models.CASCADE)
+    persona = models.ForeignKey(TblPersona, null=True, blank=True, on_delete=models.CASCADE)
     clie_nacionalidad = models.CharField(max_length=20)
-    oficio = models.ForeignKey(TablaMaestra, null=True, blank=True, on_delete=models.CASCADE)
+    oficio = models.ForeignKey(TblMaestra, null=True, blank=True, on_delete=models.CASCADE)
     def __str__(self):
         return self.clie_nacionalidad
 
+class TblDueñoHasInmueble(models.Model):
+    tbl_dueño_id = models.ForeignKey(settings.AUTH_USER_MODEL,
+        db_column='tbl_dueño_ID', max_length=45, on_delete=models.SET_NULL, blank=True, null=True)
+    inmueble_inmu_id = models.ForeignKey(TblMaestra,
+        db_column='Inmueble_INMU_ID', max_length=45, on_delete=models.SET_NULL, blank=True, null=True)
 
-class Propietario(models.Model):
-    prop_respuesta = models.CharField(max_length=60)
-    persona = models.ForeignKey(Personas, related_name='Nombre', null=True, blank=True, on_delete=models.CASCADE)
-    cliente = models.ManyToManyField(Cliente, through='propietariocliente')
-
-    def __str__(self):
-        return self.prop_respuesta
-
-class propietariocliente(models.Model):
-    procl_nota = models.CharField(max_length=60)
-    propietario = models.ForeignKey(Propietario, null=True, blank=True, on_delete=models.CASCADE)
-    cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.CASCADE)
-   
-    def __str__(self):
-        return self.procl_nota       
-
+    class Meta:
+        db_table = 'tbl_dueño_has_Inmueble'
+      
     

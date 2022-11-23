@@ -1,39 +1,57 @@
 from unicodedata import name
 from django.db import models
-
-from apps.personas.models import TablaMaestra
-
+from django.conf import settings
+from apps.personas.models import *
 
 class Disponibilidad(models.Model):
     disp_disponible = models.CharField(max_length=2)
     disp_precio = models.BigIntegerField()
-    
+
     def __str__(self):
         return self.disp_disponible
 
-class Servicio(models.Model):
-    serv_internet = models.CharField(max_length=2)
-    serv_cocina = models.CharField(max_length=3)
-    serv_patio = models.CharField(max_length=3)
-    serv_ubicacion = models.CharField(max_length=30)
-    habitacion = models.ForeignKey(TablaMaestra, related_name='habitacion', null=True, blank=True, on_delete=models.CASCADE)
-    huesped = models.ForeignKey(TablaMaestra, related_name='huesped', null=True, blank=True, on_delete=models.CASCADE)
-    baño = models.ForeignKey(TablaMaestra, related_name='baño', null=True, blank=True, on_delete=models.CASCADE)
-    disponibilidad = models.ForeignKey(Disponibilidad, related_name='dispo', null=True, blank=True, on_delete=models.CASCADE)
-    
+class TblInmueble(models.Model):
+    ciudad = models.CharField(max_length=45)
+    estrato = models.CharField(max_length=45)
+    pais_id = models.ForeignKey(TblMaestra, on_delete=models.CASCADE, related_name='pais')
+    longitud = models.CharField(max_length=45, blank=True, null=True)
+    latitud = models.CharField(max_length=45, blank=True, null=True)
+    num_pisos = models.IntegerField()
+    num_baños = models.IntegerField()
+    num_habitaciones = models.IntegerField()
+    url_imagenes = models.CharField(max_length=1000)
+    superficie = models.CharField(max_length=45)
+    descripcion = models.CharField(max_length=45)
+    tipo_inmueble = models.ForeignKey(
+        TblMaestra, blank=True, null=True, on_delete=models.SET_NULL, related_name='Tinmueble')
+    tipo_estado = models.ForeignKey(
+        TblMaestra, blank=True, null=True, on_delete=models.SET_NULL)
+    dueño = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
-    def __str__(self):
-        return self.serv_ubicacion
+    class Meta:
+        db_table = 'tbl_Inmueble'
 
-class Pago(models.Model):
-    realizado = models.CharField(max_length=20)
-    pago_fechae = models.DateField()
-    pago_fechas = models.DateField()
-    pago_valor = models.BigIntegerField()
-    servicio = models.ForeignKey(Servicio, null=True, blank=True, on_delete=models.CASCADE)
-    tipopago = models.ForeignKey(TablaMaestra, related_name='tipopago', null=True, blank=True, on_delete=models.CASCADE)
-    formapago = models.ForeignKey(TablaMaestra, related_name='formapago', null=True, blank=True, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.realizado
+class TblAlquiler(models.Model):
+    fecha_inicio = models.CharField(max_length=45)
+    fecha_final = models.CharField(max_length=45)
+    precio = models.CharField(max_length=45)
+    inmueble_inmu_id = models.ForeignKey(TblMaestra,
+        db_column='Inmueble_INMU_ID', blank=True, null=True, max_length=45, on_delete=models.SET_NULL)
+    usuario_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        db_table = 'tbl_alquiler'
+
+class TblPago(models.Model):
+    pago_fecha = models.CharField(db_column='PAGO_fecha', max_length=45)
+    pago_valor = models.CharField(db_column='PAGO_valor', max_length=45)
+    tbl_alquiler_alqu_id = models.ForeignKey(TblAlquiler,
+        db_column='tbl_alquiler_ALQU_ID', blank=True, null=True, on_delete=models.SET_NULL)
+    tipo_pago = models.ForeignKey(
+        TblMaestra, blank=True, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        db_table = 'tbl_pago'
 
