@@ -24,6 +24,12 @@
                     <input type="text" v-model="personaData.ciudad" class="form-control" required>
                 </div>
                 <div class="form-group">
+                    <label for="tipo_sexo" class="form-label">Sexo</label>
+                    <select>
+                        <option v-for="m in maestra">{{m.maes_nombre}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="" class="form-label">Identificacion</label>
                     <input type="text" v-model="personaData.num_identidad" class="form-control" required>
                 </div>
@@ -31,14 +37,6 @@
                     <label for="tipo_identificacion" class="form-label">Tipo identificacion</label>
                     <select name="tipo_identificacion" id="tipo_identificacion" v-model="personaData.tipo_identificacion" class="form-select">
                         <template v-for="dep in tipo_identificacion">
-                            <option :value="dep['id']">{{ dep['maes_nombre'] }}</option>
-                        </template>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="tipo_sexo" class="form-label">Sexo</label>
-                    <select name="tipo_sexo" id="tipo_sexo" v-model="personaData.tipo_sexo" class="form-select">
-                        <template v-for="dep in tipo_sexo">
                             <option :value="dep['id']">{{ dep['maes_nombre'] }}</option>
                         </template>
                     </select>
@@ -60,8 +58,12 @@ export default {
     data() {
         return {
             personaData: { nombre: '', apellido: '', telefono: '', correo: '',
-             ciudad: '', num_identidad: '', }
+             ciudad: '', num_identidad: '', tipo_sexo:'' },
+            maestra: []
         }
+    },
+    mounted() {
+        axios.get('http://127.0.0.1:8000/maestra/').then(response => this.maestra = response.data)
     },
     methods:{
         createPersona() {

@@ -52,12 +52,12 @@ class pagoSerializer(ModelSerializer):
         fields = '__all__'
 
 class personaSerializer(ModelSerializer):
-    tipo_sexo = serializers.StringRelatedField()
-    tipo_identificacion = serializers.StringRelatedField()
+    #tipo_sexo = serializers.StringRelatedField()
+    #tipo_identificacion = serializers.StringRelatedField()
     
     class Meta:
         model = TblPersona
-        fields = ('nombre','apellido','telefono','correo','ciudad','num_identidad','tipo_sexo','tipo_identificacion')
+        fields = ('__all__')
 
 class usuarioSerializer(ModelSerializer):
     class Meta:

@@ -1,43 +1,52 @@
-from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.views import APIView
+from django.http import JsonResponse, HttpResponse
+import json
+import json as simplejson
 from rest_framework.response import Response
-from rest_framework import status
-from ..servicios.models import TblInmueble, TblAlquiler
-from ..serializers import inmuebleSerializer, alquilerSerializer
-from django.db.models import Count
-from django.shortcuts import render, redirect
+from ..servicios.models import *
+from django.db.models.functions import Lower
 
+class Consulta1(APIView):
 
-class Consulta1(ListAPIView):
-    queryset = TblAlquiler.objects.all()
-    serializer_class = alquilerSerializer
+    def get(self, resquest, *args, **kwargs):
+        clientes = TblPersona.objects.all().values()
+        mujeres = TblPersona.objects.filter(tipo_sexo=3).values()
+        hombres = TblPersona.objects.filter(tipo_sexo=2).values()
 
-    def consulta1(request):
-        fecha1 = request.POST.get('fecha1')
-        fecha2 = request.POST.get('fecha2')
-
-        contexto = {
-            'fecha1': fecha1,
-            'fecha2': fecha2,
+        response = {
+            "clientes_totales": len(clientes),
+            "clientes_mujeres": len(mujeres),
+            "clientes_hombres": len(hombres)
         }
 
-    def get_queryset(self):
-        return TblAlquiler.objects.values('usuario_id', 'precio', 'fecha_inicio', 'fecha_final').filter(fecha_inicio__range=[fecha1, fecha2])
+        return JsonResponse(response, safe=False)
 
-    def get(self, request, *args, **kwargs):
-        consulta1 = alquilerSerializer(self.get_queryset(), many=True)
-        return Response(consulta1.data, status=status.HTTP_200_OK)
+class Consulta2(APIView):
 
+    def get(self, resquest, *args, **kwargs):
+        fecha1 = resquest.POST.get('fecha1')
+        fecha2 = resquest.POST.get('fecha2')
 
-"""        def post(self, request, *args, **kwargs):
-        print(request.data)
-        inmueble = request.data
-        inmueble['dueño'] = request.user.id
-        inmueble['pais_id'] = request.data['pais']
-        createData = inmuebleSerializer(data=inmueble)
-        if createData.is_valid():
-            createData.save()
-            return Response(createData.data, status=status.HTTP_200_OK)
-        return Response(createData.errors, status=status.HTTP_400_BAD_REQUEST)"""
+        consulta = TblAlquiler.objects.values('precio','fecha_inicio','fecha_final','usuario_id__username').filter(fecha_inicio__range=[fecha1,fecha2])
 
-    #Consulta2 = TblAlquiler.objects.select_related('usuario_id__username').only('precio', 'fecha_inicio', 'fecha_final')[:10]
+        response = {
+            "fecha1": fecha1,
+            "fecha2": fecha2,
+            "consulta": consulta
+        }
 
+        return HttpResponse({response, list(consulta)})
+
+class Consulta3(APIView):
+
+    def get(self, resquest, *args, **kwargs):
+        result_list = list(TblPago.objects.values('pago_fecha', 'pago_valor'))
+
+        return HttpResponse(json.dumps(result_list))
+
+class Consulta4(APIView):
+
+    def get(self, resquest, *args, **kwargs):
+        q = TblPago.objects.filter(tipo_pago__maes_nombre='Efectivo')
+
+        return HttpResponse(json.dumps(q))

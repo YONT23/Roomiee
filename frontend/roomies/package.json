@@ -17,12 +17,14 @@
     "bootstrap-vue": "^2.23.1",
     "bootstrap-vue-3": "^0.4.8",
     "jspdf": "^2.5.1",
+    "pdfjs": "^2.4.7",
     "primeicons": "^6.0.1",
     "primevue": "^3.20.0",
     "scss": "^0.2.4",
     "vue": "^3.2.45",
     "vue-axios": "^3.5.2",
     "vue-router": "^4.1.6",
+    "vue-select2": "^0.2.6",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

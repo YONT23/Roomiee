@@ -10,44 +10,49 @@
                 </div>
             </div>
         </div>
-        <div position="center" class="card card-transition mx-3" style="max-width: 20rem;cursor: pointer; " v-for="i in is" :key="i.id">
-           <div class="hijo">
-            <thead>
-                <th scoped="col">Servicio {{i.id}}</th>
-            </thead>
-            <tbody>
-                <td>
-                    <div class="card" style="width: 19rem;">
-                        <img class="card-img-top" :src="i.url_imagenes" alt="Image">
-                        <span class="card-pinned-top-end">
-                            <span class="badge bg-primary rounded-pill">Estrato: {{ i.estrato }}</span>
-                        </span>
-                        <div class="card-body">
-                            <h3 class="card-title text-center">{{ i.descripcion }}</h3>
-                            <p class="card-text text-body my-2">{{ (i as any)?.pais_id.maes_nombre }}</p>
-                            <p>{{ i.ciudad }}</p>
-                            <div class="card-footer d-flex flex-row justify-content-around p-1">
-                                <div class="w-25 text-center">
-                                    <small>Superficie</small>
-                                    <br>
-                                    {{ i.superficie }}
-                                </div>
-                                <div class="w-25 text-center">
-                                    <small>Baños</small>
-                                    <br>
-                                    {{ i.num_baños }}
-                                </div>
-                                <div class="w-25 text-center">
-                                    <small>Habitaciones</small>
-                                    <br>
-                                    {{ i.num_habitaciones }}
+        <div class="card card-transition" style="max-width: 20rem;cursor: pointer; " v-for="i in is" :key="i.id">
+           <div class="row">
+           <div class="col-4"></div>
+            <div class="col-8">
+                <center>
+                    <thead>
+                        <th scoped="col">Servicio {{i.id}}</th>
+                    </thead>
+                    <tbody>
+                        <td>
+                            <div class="card" style="width: 19rem;">
+                                <img class="card-img-top" :src="i.url_imagenes" alt="Image">
+                                <span class="card-pinned-top-end">
+                                    <span class="badge bg-primary rounded-pill">Estrato: {{ i.estrato }}</span>
+                                </span>
+                                <div class="card-body">
+                                    <h3 class="card-title text-center">{{ i.descripcion }}</h3>
+                                    <p class="card-text text-body my-2">{{ (i as any)?.pais_id.maes_nombre }}</p>
+                                    <p>{{ i.ciudad }}</p>
+                                    <div class="card-footer d-flex flex-row justify-content-around p-1">
+                                        <div class="w-25 text-center">
+                                            <small>Superficie</small>
+                                            <br>
+                                            {{ i.superficie }}
+                                        </div>
+                                        <div class="w-25 text-center">
+                                            <small>Baños</small>
+                                            <br>
+                                            {{ i.num_baños }}
+                                        </div>
+                                        <div class="w-25 text-center">
+                                            <small>Habitaciones</small>
+                                            <br>
+                                            {{ i.num_habitaciones }}
+                                        </div>
+                                    </div>
+            
                                 </div>
                             </div>
-    
-                        </div>
-                    </div>
-                </td>
-            </tbody>
+                        </td>
+                    </tbody>
+                </center>
+               </div>
            </div>
         </div>
     </div>

@@ -45,7 +45,7 @@ class TblAlquiler(models.Model):
         db_table = 'tbl_alquiler'
 
 class TblPago(models.Model):
-    pago_fecha = models.CharField(db_column='PAGO_fecha', max_length=45)
+    pago_fecha = models.DateField(db_column='PAGO_fecha', max_length=45)
     pago_valor = models.CharField(db_column='PAGO_valor', max_length=45)
     tbl_alquiler_alqu_id = models.ForeignKey(TblAlquiler,
         db_column='tbl_alquiler_ALQU_ID', blank=True, null=True, on_delete=models.SET_NULL)

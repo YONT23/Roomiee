@@ -1,37 +1,42 @@
 <template>
-    <div class="card card-border-color card-border-color-primary w-100 mx-auto">
-
-        <div class="card-header card-header-divider text-center fs-4">PERSONAS
-            <p class="lead">Tabla con las personas que hacen parte de Roomies.</p>
-            <a position:left href="/nuevoc" class="agregar">Agregar</a>
+    <div id="app">
+        <div class="card card-border-color card-border-color-primary w-100 mx-auto">
+            <div class="card-header card-header-divider text-center fs-4">PERSONAS
+                <p class="lead">Tabla con las personas que hacen parte de Roomies.</p>
+                <a position:left href="/nuevoc" class="agregar">Agregar</a>
+                <br />
+                <button position:left @click="descargarPdf()" class="btn">Imprimir</button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scoped="col">Nombre</th>
+                        <th scoped="col">Apellido</th>
+                        <th scoped="col">Ciudad</th>
+                        <th scoped="col">Correo</th>
+                        <th scoped="col">Identidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="persona in personas" :key="persona.id">
+                        <td scoped="row">{{ persona.nombre }}</td>
+                        <td scoped="row">{{ persona.apellido }}</td>
+                        <td scoped="row">{{ persona.ciudad }}</td>
+                        <td scoped="row">{{ persona.correo }}</td>
+                        <td scoped="row">{{ persona.num_identidad }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <table class="table">
-            <thead>
-              <tr>
-                <th scoped="col">Nombre</th>
-                <th scoped="col">Apellido</th>
-                <th scoped="col">Ciudad</th>
-                <th scoped="col">Correo</th>
-                <th scoped="col">Identidad</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="persona in personas" :key="persona.id">
-                <td scoped="row">{{ persona.nombre }}</td>
-                <td scoped="row">{{ persona.apellido }}</td>
-                <td scoped="row">{{ persona.ciudad }}</td>
-                <td scoped="row">{{ persona.correo }}</td>
-                <td scoped="row">{{ persona.num_identidad }}</td>
-              </tr>
-            </tbody>
-          </table>
     </div>
 </template>
 
 <script lang="ts">
 import axios from 'axios'
+import jsPDF from 'jspdf'
 
 export default {
+    name: 'pdf',
     data() {
         return {
             personas: []
@@ -39,7 +44,15 @@ export default {
     },
     mounted() {
         axios.get('http://127.0.0.1:8000/persona/').then(response => this.personas = response.data)
-    }
+    },
+    el: '#app',
+    methods: {
+        descargarPdf: function() {
+            var pdf = new jsPDF();
+            window.print();
+            pdf.save('roomies.pdf');
+        }
+    },
 }
 </script>
 

@@ -26,8 +26,8 @@ class TblPersona(models.Model):
     tipo_identificacion = models.ForeignKey(TblMaestra, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self) -> str:
-        return self.nombre + ' ' + self.apellido
-
+        return '{}'.format( self.nombre)
+        
     class Meta:
         db_table = 'tbl_persona'
 
